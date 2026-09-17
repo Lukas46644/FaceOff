@@ -1,0 +1,16 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Backend
+backend/.venv/
+backend/__pycache__/
+**/__pycache__/
+*.pyc
+
+# Uploaded files (temp storage)
+uploads/
+
+# Editors / OS
+.vscode/
+.DS_Store
