@@ -1,15 +1,15 @@
+import BlurOnIcon from '@mui/icons-material/BlurOn'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import GridOnIcon from '@mui/icons-material/GridOn'
 import {
-  Box,
   FormControl,
-  FormControlLabel,
   InputLabel,
   MenuItem,
   Paper,
-  Radio,
-  RadioGroup,
   Select,
   Slider,
-  Stack,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   type SelectChangeEvent,
 } from '@mui/material'
@@ -26,22 +26,10 @@ interface AnonymizeSettingsProps {
   onShapeChange: (shape: Shape) => void
 }
 
-const METHOD_OPTIONS: { value: Method; label: string; hint: string }[] = [
-  {
-    value: 'pixelate',
-    label: 'Verpixeln',
-    hint: 'Kann sensible Inhalte nicht immer vollständig schützen',
-  },
-  {
-    value: 'blur',
-    label: 'Verwischen',
-    hint: 'Kann sensible Inhalte nicht immer vollständig schützen',
-  },
-  {
-    value: 'darken',
-    label: 'Verdunkeln',
-    hint: 'Hoher Datenschutz',
-  },
+const METHOD_OPTIONS: { value: Method; label: string; icon: React.ReactNode }[] = [
+  { value: 'pixelate', label: 'Verpixeln', icon: <GridOnIcon fontSize="small" /> },
+  { value: 'blur', label: 'Verwischen', icon: <BlurOnIcon fontSize="small" /> },
+  { value: 'darken', label: 'Verdunkeln', icon: <DarkModeIcon fontSize="small" /> },
 ]
 
 function AnonymizeSettings({
@@ -54,34 +42,40 @@ function AnonymizeSettings({
 }: AnonymizeSettingsProps) {
   return (
     <Paper variant="outlined" sx={{ p: 3, width: '100%', maxWidth: 560 }}>
-      <RadioGroup
-        row
+      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5 }}>
+        Methode
+      </Typography>
+      <ToggleButtonGroup
         value={method}
-        onChange={(event) => onMethodChange(event.target.value as Method)}
-        sx={{ flexWrap: 'nowrap', justifyContent: 'space-between' }}
+        exclusive
+        fullWidth
+        onChange={(_, value) => value && onMethodChange(value)}
+        sx={{ mb: 3 }}
       >
         {METHOD_OPTIONS.map((option) => (
-          <Stack key={option.value} spacing={0.5} sx={{ alignItems: 'center', flex: 1 }}>
-            <Typography variant="subtitle1">{option.label}</Typography>
-            <FormControlLabel value={option.value} control={<Radio />} label="" sx={{ m: 0 }} />
-            <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
-              {option.hint}
-            </Typography>
-          </Stack>
+          <ToggleButton
+            key={option.value}
+            value={option.value}
+            sx={{ flexDirection: 'column', gap: 0.5, py: 1.2, textTransform: 'none' }}
+          >
+            {option.icon}
+            <Typography variant="caption">{option.label}</Typography>
+          </ToggleButton>
         ))}
-      </RadioGroup>
+      </ToggleButtonGroup>
 
-      <Box sx={{ mt: 4, px: 1 }}>
-        <Typography gutterBottom>Intensität</Typography>
-        <Slider
-          value={intensity}
-          onChange={(_, value) => onIntensityChange(value as number)}
-          min={0}
-          max={100}
-        />
-      </Box>
+      <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+        Intensität
+      </Typography>
+      <Slider
+        value={intensity}
+        onChange={(_, value) => onIntensityChange(value as number)}
+        min={0}
+        max={100}
+        sx={{ mb: 3 }}
+      />
 
-      <FormControl fullWidth sx={{ mt: 2 }}>
+      <FormControl fullWidth>
         <InputLabel id="anonymize-shape-label">Form</InputLabel>
         <Select
           labelId="anonymize-shape-label"
