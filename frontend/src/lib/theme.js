@@ -1,7 +1,7 @@
-import { createTheme, type PaletteMode } from '@mui/material'
+import { createTheme } from '@mui/material'
 
 // "Fog" design direction: soft, translucent, rounded — mirrors the blur/soften effect.
-export function createFogTheme(mode: PaletteMode) {
+export function createFogTheme(mode) {
   const isDark = mode === 'dark'
 
   return createTheme({

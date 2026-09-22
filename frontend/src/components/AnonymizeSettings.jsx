@@ -11,22 +11,9 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-  type SelectChangeEvent,
 } from '@mui/material'
 
-export type Method = 'pixelate' | 'blur' | 'darken'
-export type Shape = 'circle' | 'square'
-
-interface AnonymizeSettingsProps {
-  method: Method
-  intensity: number
-  shape: Shape
-  onMethodChange: (method: Method) => void
-  onIntensityChange: (intensity: number) => void
-  onShapeChange: (shape: Shape) => void
-}
-
-const METHOD_OPTIONS: { value: Method; label: string; icon: React.ReactNode }[] = [
+const METHOD_OPTIONS = [
   { value: 'pixelate', label: 'Pixelate', icon: <GridOnIcon fontSize="small" /> },
   { value: 'blur', label: 'Blur', icon: <BlurOnIcon fontSize="small" /> },
   { value: 'darken', label: 'Darken', icon: <DarkModeIcon fontSize="small" /> },
@@ -39,7 +26,7 @@ function AnonymizeSettings({
   onMethodChange,
   onIntensityChange,
   onShapeChange,
-}: AnonymizeSettingsProps) {
+}) {
   return (
     <Paper variant="outlined" sx={{ p: 3, width: '100%', maxWidth: 560 }}>
       <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5 }}>
@@ -69,7 +56,7 @@ function AnonymizeSettings({
       </Typography>
       <Slider
         value={intensity}
-        onChange={(_, value) => onIntensityChange(value as number)}
+        onChange={(_, value) => onIntensityChange(value)}
         min={0}
         max={100}
         sx={{ mb: 3 }}
@@ -81,7 +68,7 @@ function AnonymizeSettings({
           labelId="anonymize-shape-label"
           label="Shape"
           value={shape}
-          onChange={(event: SelectChangeEvent) => onShapeChange(event.target.value as Shape)}
+          onChange={(event) => onShapeChange(event.target.value)}
         >
           <MenuItem value="circle">Circle</MenuItem>
           <MenuItem value="square">Square</MenuItem>

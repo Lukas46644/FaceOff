@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { CssBaseline, ThemeProvider, useMediaQuery } from '@mui/material'
 import { createFogTheme } from './lib/theme'
 import './index.css'
-import App from './App.tsx'
+import App from './App.jsx'
 
 function Root() {
   const prefersDark = useMediaQuery('(prefers-color-scheme: dark)')
@@ -17,7 +17,7 @@ function Root() {
   )
 }
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Root />
   </StrictMode>,

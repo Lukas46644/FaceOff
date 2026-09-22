@@ -23,7 +23,7 @@ Automatically detect and anonymize faces in photos — pixelate, blur, or darken
 
 | Layer    | Stack |
 |----------|-------|
-| Frontend | React 19, TypeScript, Vite, MUI |
+| Frontend | React 19, JavaScript (ES modules), Vite, MUI |
 | Backend  | FastAPI, OpenCV (`opencv-python-headless`), NumPy |
 | Package managers | npm (frontend), [uv](https://docs.astral.sh/uv/) (backend) |
 

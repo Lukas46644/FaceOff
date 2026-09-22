@@ -1,25 +1,23 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
 import DownloadIcon from '@mui/icons-material/Download'
 import { Alert, Box, Button, CircularProgress, Stack, Typography } from '@mui/material'
-import AnonymizeSettings, { type Method, type Shape } from './AnonymizeSettings'
+import AnonymizeSettings from './AnonymizeSettings'
 import CompareSlider from './CompareSlider'
 import { API_URL } from '../lib/api'
 
-type Status = 'idle' | 'uploading' | 'success' | 'error'
-
 function ImageUpload() {
-  const [file, setFile] = useState<File | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
-  const [resultUrl, setResultUrl] = useState<string | null>(null)
-  const [resultFilename, setResultFilename] = useState<string | null>(null)
-  const [status, setStatus] = useState<Status>('idle')
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [file, setFile] = useState(null)
+  const [preview, setPreview] = useState(null)
+  const [resultUrl, setResultUrl] = useState(null)
+  const [resultFilename, setResultFilename] = useState(null)
+  const [status, setStatus] = useState('idle')
+  const [errorMessage, setErrorMessage] = useState(null)
 
-  const [method, setMethod] = useState<Method>('pixelate')
+  const [method, setMethod] = useState('pixelate')
   const [intensity, setIntensity] = useState(50)
-  const [shape, setShape] = useState<Shape>('square')
+  const [shape, setShape] = useState('square')
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event) => {
     const selected = event.target.files?.[0]
     if (!selected) return
 

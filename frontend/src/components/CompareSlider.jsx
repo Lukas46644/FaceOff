@@ -1,35 +1,28 @@
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
+import { useRef, useState } from 'react'
 import { Box } from '@mui/material'
-
-interface CompareSliderProps {
-  beforeSrc: string
-  afterSrc: string
-  beforeLabel?: string
-  afterLabel?: string
-}
 
 function CompareSlider({
   beforeSrc,
   afterSrc,
   beforeLabel = 'Original',
   afterLabel = 'Result',
-}: CompareSliderProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
+}) {
+  const containerRef = useRef(null)
   const [pos, setPos] = useState(50)
 
-  const updatePos = (clientX: number) => {
+  const updatePos = (clientX) => {
     const rect = containerRef.current?.getBoundingClientRect()
     if (!rect) return
     const pct = ((clientX - rect.left) / rect.width) * 100
     setPos(Math.max(0, Math.min(100, pct)))
   }
 
-  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const handlePointerDown = (event) => {
     event.currentTarget.setPointerCapture(event.pointerId)
     updatePos(event.clientX)
   }
 
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+  const handlePointerMove = (event) => {
     if (event.buttons !== 1) return
     updatePos(event.clientX)
   }
