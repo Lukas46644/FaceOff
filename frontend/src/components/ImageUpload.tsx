@@ -12,7 +12,6 @@ function ImageUpload() {
   const [preview, setPreview] = useState<string | null>(null)
   const [resultUrl, setResultUrl] = useState<string | null>(null)
   const [resultFilename, setResultFilename] = useState<string | null>(null)
-  const [faceCount, setFaceCount] = useState<number | null>(null)
   const [status, setStatus] = useState<Status>('idle')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -28,7 +27,6 @@ function ImageUpload() {
     setPreview(URL.createObjectURL(selected))
     setResultUrl(null)
     setResultFilename(null)
-    setFaceCount(null)
     setStatus('idle')
     setErrorMessage(null)
   }
@@ -59,7 +57,6 @@ function ImageUpload() {
       const data = await response.json()
       setResultUrl(`${API_URL}/uploads/${data.filename}`)
       setResultFilename(data.filename)
-      setFaceCount(data.faces_detected)
       setStatus('success')
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Upload failed')
@@ -86,7 +83,7 @@ function ImageUpload() {
     <Stack direction="row" spacing={4} sx={{ width: '100%', alignItems: 'flex-start' }}>
       <Stack spacing={3} sx={{ width: 320, flexShrink: 0 }}>
         <Button variant="outlined" component="label">
-          Bild auswählen
+          Select image
           <input type="file" accept="image/*" hidden onChange={handleFileChange} />
         </Button>
 
@@ -104,24 +101,21 @@ function ImageUpload() {
           disabled={!file || status === 'uploading'}
           onClick={handleSubmit}
         >
-          {status === 'uploading' ? <CircularProgress size={20} color="inherit" /> : 'Verarbeiten'}
+          {status === 'uploading' ? <CircularProgress size={20} color="inherit" /> : 'Process'}
         </Button>
 
         {resultUrl && (
           <Button variant="outlined" startIcon={<DownloadIcon />} onClick={handleDownload}>
-            Bild herunterladen
+            Download image
           </Button>
         )}
 
-        {status === 'success' && (
-          <Alert severity="success">{faceCount} Gesicht(er) erkannt und anonymisiert.</Alert>
-        )}
         {status === 'error' && <Alert severity="error">{errorMessage}</Alert>}
       </Stack>
 
       <Box sx={{ flexGrow: 1, minWidth: 0 }}>
         {!preview && (
-          <Typography color="text.secondary">Noch kein Bild ausgewählt.</Typography>
+          <Typography color="text.secondary">No image selected yet.</Typography>
         )}
 
         {preview && !resultUrl && (
@@ -136,9 +130,9 @@ function ImageUpload() {
         {preview && resultUrl && (
           <Box>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
-              Original / Ergebnis (Regler ziehen zum Vergleichen)
+              Original / Result (Drag slider to compare)
             </Typography>
-            <CompareSlider beforeSrc={preview} afterSrc={resultUrl} beforeLabel="Original" afterLabel="Ergebnis" />
+            <CompareSlider beforeSrc={preview} afterSrc={resultUrl} beforeLabel="Original" afterLabel="Result" />
           </Box>
         )}
       </Box>

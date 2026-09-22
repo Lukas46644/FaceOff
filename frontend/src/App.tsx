@@ -5,7 +5,7 @@ function App() {
   return (
     <section id="center">
       <h1>FaceOff</h1>
-      <p className="subtitle">Gesichter automatisch erkennen und unkenntlich machen.</p>
+      <p className="subtitle">Automatically detect and anonymize faces.</p>
       <ImageUpload />
     </section>
   )

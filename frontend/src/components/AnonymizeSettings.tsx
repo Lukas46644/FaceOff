@@ -27,9 +27,9 @@ interface AnonymizeSettingsProps {
 }
 
 const METHOD_OPTIONS: { value: Method; label: string; icon: React.ReactNode }[] = [
-  { value: 'pixelate', label: 'Verpixeln', icon: <GridOnIcon fontSize="small" /> },
-  { value: 'blur', label: 'Verwischen', icon: <BlurOnIcon fontSize="small" /> },
-  { value: 'darken', label: 'Verdunkeln', icon: <DarkModeIcon fontSize="small" /> },
+  { value: 'pixelate', label: 'Pixelate', icon: <GridOnIcon fontSize="small" /> },
+  { value: 'blur', label: 'Blur', icon: <BlurOnIcon fontSize="small" /> },
+  { value: 'darken', label: 'Darken', icon: <DarkModeIcon fontSize="small" /> },
 ]
 
 function AnonymizeSettings({
@@ -43,7 +43,7 @@ function AnonymizeSettings({
   return (
     <Paper variant="outlined" sx={{ p: 3, width: '100%', maxWidth: 560 }}>
       <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5 }}>
-        Methode
+        Method
       </Typography>
       <ToggleButtonGroup
         value={method}
@@ -65,7 +65,7 @@ function AnonymizeSettings({
       </ToggleButtonGroup>
 
       <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-        Intensität
+        Intensity
       </Typography>
       <Slider
         value={intensity}
@@ -76,15 +76,15 @@ function AnonymizeSettings({
       />
 
       <FormControl fullWidth>
-        <InputLabel id="anonymize-shape-label">Form</InputLabel>
+        <InputLabel id="anonymize-shape-label">Shape</InputLabel>
         <Select
           labelId="anonymize-shape-label"
-          label="Form"
+          label="Shape"
           value={shape}
           onChange={(event: SelectChangeEvent) => onShapeChange(event.target.value as Shape)}
         >
-          <MenuItem value="circle">Kreis</MenuItem>
-          <MenuItem value="square">Viereck</MenuItem>
+          <MenuItem value="circle">Circle</MenuItem>
+          <MenuItem value="square">Square</MenuItem>
         </Select>
       </FormControl>
     </Paper>

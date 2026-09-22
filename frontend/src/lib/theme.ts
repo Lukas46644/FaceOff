@@ -1,6 +1,6 @@
 import { createTheme, type PaletteMode } from '@mui/material'
 
-// "Fog" design direction: soft, translucent, rounded — mirrors the blur/weichzeichnen effect.
+// "Fog" design direction: soft, translucent, rounded — mirrors the blur/soften effect.
 export function createFogTheme(mode: PaletteMode) {
   const isDark = mode === 'dark'
 

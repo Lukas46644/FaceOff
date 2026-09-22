@@ -1,3 +1,4 @@
+import os
 import uuid
 from pathlib import Path
 from typing import Literal
@@ -9,12 +10,24 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 # Project root is FaceOff/ (three levels up from this file: backend/src/backend/main.py)
-UPLOAD_DIR = Path(__file__).resolve().parents[3] / "uploads"
-UPLOAD_DIR.mkdir(exist_ok=True)
+DEFAULT_UPLOAD_DIR = Path(__file__).resolve().parents[3] / "uploads"
+UPLOAD_DIR = Path(os.environ.get("UPLOAD_DIR", DEFAULT_UPLOAD_DIR))
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+# Comma-separated list, e.g. "https://faceoff.example.com,https://app.faceoff.example.com"
+CORS_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(",")
+    if origin.strip()
+]
+
+MAX_UPLOAD_BYTES = int(os.environ.get("MAX_UPLOAD_BYTES", 10 * 1024 * 1024))  # 10 MB
 
 FACE_CASCADE = cv2.CascadeClassifier(
     cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
 )
+if FACE_CASCADE.empty():
+    raise RuntimeError("Failed to load Haar cascade classifier")
 
 Method = Literal["pixelate", "blur", "darken"]
 Shape = Literal["circle", "square"]
@@ -23,12 +36,17 @@ app = FastAPI(title="FaceOff API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+
+
+@app.get("/health")
+async def health() -> dict[str, str]:
+    return {"status": "ok"}
 
 
 def _shape_mask(w: int, h: int, shape: Shape) -> np.ndarray:
@@ -87,6 +105,12 @@ async def upload_image(
         raise HTTPException(status_code=400, detail="Only image uploads are allowed")
 
     raw_bytes = await file.read()
+    if len(raw_bytes) > MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large (max {MAX_UPLOAD_BYTES // (1024 * 1024)} MB)",
+        )
+
     image = cv2.imdecode(np.frombuffer(raw_bytes, np.uint8), cv2.IMREAD_COLOR)
     if image is None:
         raise HTTPException(status_code=400, detail="Could not decode image")

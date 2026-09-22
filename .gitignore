@@ -11,6 +11,11 @@ backend/__pycache__/
 # Uploaded files (temp storage)
 uploads/
 
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
 # Editors / OS
 .vscode/
 .DS_Store

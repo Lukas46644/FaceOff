@@ -12,7 +12,7 @@ function CompareSlider({
   beforeSrc,
   afterSrc,
   beforeLabel = 'Original',
-  afterLabel = 'Ergebnis',
+  afterLabel = 'Result',
 }: CompareSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [pos, setPos] = useState(50)
